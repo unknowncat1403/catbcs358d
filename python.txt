@@ -1,0 +1,139 @@
+6.a)
+import matplotlib.pyplot as plt
+years=[2015,2016,2017,2018,2019]
+revenue=[500,600,700,800,900]
+plt.plot(years,revenue,marker='o',color='blue',linestyle='-',label='Annual Revenue')
+plt.xlabel('years')
+plt.ylabel('Revenue')
+plt.title('Company Annual Revenue')
+plt.grid(True,linestyle='--',alpha=0.7)
+plt.legend()
+plt.show()
+
+6.b)
+import matplotlib.pyplot as plt
+import numpy as np
+x=np.linspace(0,10,100)
+y1=x
+y2=x**2
+y3=np.sin(x)
+plt.figure(figsize=(8,6))
+plt.plot(x,y1,label='Linear',marker='o',color='green',linestyle='-',markersize=4,linewidth=2)
+plt.plot(x,y2,label='Quadratic',marker='d',color='red',linestyle='--',markersize=4,linewidth=2)
+plt.plot(x,y3,label='sine',marker='*',color='blue',linestyle=':',markersize=4,linewidth=2)
+plt.xlabel('x axis')
+plt.ylabel('y axis')
+plt.title('linear plot')
+plt.legend()
+plt.grid()
+plt.show()
+
+7) 1]pair plot
+import seaborn as sns
+df=sns.load_dataset("planets")
+sns.pairplot(df,hue='method')
+
+2]joint plot
+import seaborn as sns
+import matplotlib.pyplot as plt
+iris=sns.load_dataset("iris")
+sns.jointplot(x="sepal_length",y="sepal_width",data=iris,kind="scatter")
+plt.show()
+
+3]heat map
+import seaborn as sns
+import matplotlib.pyplot as plt
+iris=sns.load_dataset("iris")
+correlation_matrix=iris.corr()
+sns.heatmap(correlation_matrix,annot=True)
+plt.title("HEAT MAP")
+plt.show()
+
+4]box plot
+import seaborn as sns
+import matplotlib.pyplot as plt
+tips=sns.load_dataset("tips")
+sns.boxplot(x="day",y="total_bill",data=tips)
+plt.title("BOX PLOT")
+plt.show()
+
+
+8.a)
+from bokeh.plotting import figure,show
+from bokeh.plotting import ColumnDataSource
+from bokeh.models.annotations import Title,Legend,LegendItem
+from bokeh.io import output_notebook, show
+x=[1,2,3,4,5]
+y1=[2,5,8,6,7]
+y2=[4,6,7,5,9]
+p=figure(title='Line Graph with annotations and legends',x_axis_label='X-axis',y_axis_label='Y-axis')
+source1=ColumnDataSource(data=dict(x=x,y=y1))
+source2=ColumnDataSource(data=dict(x=x,y=y2))
+line1=p.line('x','y',source=source1,line_width=2,line_color='blue',legend_label='Line1')
+line2=p.line('x','y',source=source2,line_width=2,line_color='red',legend_label='Line2')
+annotation=Title(text="AnnotationExample",text_font_size='14px')
+p.add_layout(annotation,'above')
+legend=Legend(items=[LegendItem(label='Line1',renderers=[line1]),LegendItem(label='Line2',renderers=[line2])])
+p.add_layout(legend,'above')
+output_notebook()
+show(p)
+
+8.b)
+from bokeh.plotting import figure,show,output_file
+from bokeh.models import ColumnDataSource
+from bokeh.layouts import layout
+x=list(range(1,11))
+y1=(1,10)
+y2=(1,10)
+p1=figure(title="Line Plot",x_axis_label='X-axis',y_axis_label='Y-axis')
+p1.line(x,y1,line_width=2,line_color='blue')
+p2=figure(title="Scatter plot",x_axis_label='X-axis',y_axis_label='Y-axis')
+p2.scatter(x,y2,size=10,color='red',marker='circle')
+p3=figure(title="Bar plot",x_axis_label='X-axis',y_axis_label='Y-axis')
+p3.vbar(x=x,top=y2,width=0.5,color='green')
+p4=figure(title="Histogram",x_axis_label='values',y_axis_label='Frequency')
+p4.quad(top=hist,bottom=0,left=edges[:-1],right=edges[1:],fill_color='purple',line_color='black')
+layout=layout([[p1,p2],[p3,p4]])
+output_file("bokeh_plots.html")
+show(layout)
+
+9.a)
+import plotly.graph_objects as go
+import numpy as np
+x=np.linspace(-5,5,100)
+y=np.linspace(-5,5,100)
+x,y=np.meshgrid(x,y)
+z=np.sin(np.sqrt(x**2+y**2))
+fig=go.Figure(data=[go.Surface(z=z,x=x,y=y)])
+fig.update_layout(scene=dict(xaxis_title='xAxis',yaxis_title='yAxis',zaxis_title='zAxis'),title='3D surface plot example')
+fig.show()
+
+9.b)
+import plotly.graph_objects as go
+import numpy as np
+altitude=np.random.uniform(0,10000,100)
+temperature=np.random.uniform(0,40,100)
+humidity=np.random.uniform(0,100,100)
+wind_speed=np.random.uniform(0,30,100)
+fig=go.Figure(data=[go.Scatter3d(x=altitude,y=temperature,z=humidity,mode='markers',marker=dict(size=5,color=wind_speed,opacity=0.7))])
+fig.update_layout(scene=dict(xaxis_title='altitude(m)',yaxis_title='temperature(C)',zaxis_title='Humidity(%)'))
+fig.show()
+
+10.a)
+import plotly.graph_objects as go
+import plotly.offline as pyo
+import pandas as pd
+data={'Date':pd.date_range(start='2023-01-01',periods=10,freq='D'),'value':[25,30,35,40,45,50,55,60,65,70]}
+df=pd.DataFrame(data)
+trace=go.Scatter(x=df['Date'],y=df['value'],mode='lines',name='Time Series')
+layout=go.Layout(title='TimeseriesPlot',xaxis=dict(title='date'),yaxis=dict(title='value'))
+fig=go.Figure(data=[trace],layout=layout)
+pyo.plot(fig,filename='timeseries_plot.html')
+
+10.b)
+import plotly.express as px
+import pandas as pd
+data={"City":["Bengaluru","Mysuru","Belagavi","Kalburgi","Davangere","New Delhi"],"Lat":[12.9716,12.2958,15.8497,17.3291,14.4644,28.6139],"Lon":[77.5946,76.6394,74.5048,77.2471,75.9224,77.2090]}
+df=pd.DataFrame(data)
+fig=px.scatter_geo(df,lat="Lat",lon="Lon",text="City",title="Cities in india",projection="natural earth")
+fig.show()
